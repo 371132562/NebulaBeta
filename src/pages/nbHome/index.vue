@@ -3,7 +3,7 @@ import axios from "axios"
 import { vtuberList } from "@/config/common.js"
 
 vtuberList.forEach(async (item: number) => {
-  await axios.get(`https://ukamnads.icu/api/v2/channel?uId=${item}&includeExtra=true`).then(res => {
+  await axios.get(`https://api.ukamnads.icu/api/v2/channel?uId=${item}&includeExtra=true`).then(res => {
     console.log(res)
   })
 })
