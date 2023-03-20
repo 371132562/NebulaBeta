@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
+# local files
 auto-imports.d.ts
 components.d.ts
 pnpm-lock.yaml

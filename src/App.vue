@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import Layout from '@/components/Layout'
+import NbLayout from '@/components/nbLayout/index.vue'
 </script>
 
 <template>
-    <Layout />
+  <NbLayout />
 </template>
 
 <style scoped lang="scss"></style>
