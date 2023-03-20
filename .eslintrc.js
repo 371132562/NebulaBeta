@@ -21,6 +21,7 @@ module.exports = {
     rules: {
         indent: ['error', 4],
         'linebreak-style': ['error', 'unix'],
-        semi: ['error', 'never']
+        semi: ['error', 'never'],
+        'vue/multi-word-component-names': 'off'
     }
 }
