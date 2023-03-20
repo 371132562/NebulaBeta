@@ -1,1 +1,10 @@
 dist/*
+node_modules/*
+.vscode/*
+.idea/*
+.DS_Store/*
+
+index.html
+package.json
+auto-imports.d.ts
+components.d.ts
