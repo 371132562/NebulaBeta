@@ -10,6 +10,8 @@ export const menu = [
   { name: '查询', icon: EpSearch },
   { name: '关于', icon: EpWarning }
   // { name: '统计', icon: EpDataAnalysis }
+
+
 ]
 
 //主播list
