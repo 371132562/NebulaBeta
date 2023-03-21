@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { menu } from '@/config/common.js'
+import { menu } from '@/config/common'
 </script>
+
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'NbHeader'
-}
+})
 </script>
 <template>
   <div class="nb-header">

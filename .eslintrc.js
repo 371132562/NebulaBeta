@@ -8,7 +8,6 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    // 'plugin:prettier/recommended',
     'plugin:vue/vue3-recommended'
   ],
   parser: 'vue-eslint-parser',
@@ -17,8 +16,20 @@ module.exports = {
     sourceType: 'module',
     ecmaVersion: 'latest'
   },
-  overrides: [],
+  overrides: [
+    {
+      files: ['*.js', '*.ts'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint', 'prettier'],
+      extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:prettier/recommended'
+      ]
+    }
+  ],
   rules: {
+    indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],
     semi: ['error', 'never']
   }

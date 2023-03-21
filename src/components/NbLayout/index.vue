@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import NbHeader from '@/components/nbHeader/index.vue'
-import NbContent from '@/components/nbContent/index.vue'
+import NbHeader from '@/components/NbHeader/index.vue'
+import NbContent from '@/components/NbContent/index.vue'
 </script>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'NbLayout'
-}
+})
 </script>
 
 <template>

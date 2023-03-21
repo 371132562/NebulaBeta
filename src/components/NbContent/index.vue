@@ -1,11 +1,10 @@
-<script setup lang="ts">
-const a = 1
-</script>
+<script setup lang="ts"></script>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'NbContent'
-}
+})
 </script>
 
 <template>

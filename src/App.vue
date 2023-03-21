@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NbLayout from '@/components/nbLayout/index.vue'
+import NbLayout from '@/components/NbLayout/index.vue'
 </script>
 
 <template>
