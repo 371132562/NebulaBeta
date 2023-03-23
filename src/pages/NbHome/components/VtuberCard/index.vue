@@ -29,7 +29,7 @@ export default defineComponent({
           <div class="vtuber-avatar">
             <el-avatar
               shape="circle"
-              :size="80"
+              :size="60"
               :src="item.channel.faceUrl"
             />
             <div
@@ -46,12 +46,26 @@ export default defineComponent({
       </div>
       <div class="vtuber-card-divider" />
       <div class="vtuber-data">
-        <div class="vtuber-data-title">
-          1
-        </div>
-        <div class="vtuber-data-content">
-          2
-        </div>
+        <el-statistic
+          title="总时长（时）"
+          :value="item.channel.totalLiveSecond / (60 * 60)"
+          precision="2"
+        />
+      </div>
+      <div class="vtuber-card-divider" />
+      <div class="vtuber-data">
+        <el-statistic
+          title="总直播场次"
+          :value="item.channel.totalLiveCount"
+          precision="2"
+        />
+      </div>
+      <div class="vtuber-card-divider" />
+      <div class="vtuber-data">
+        <el-statistic
+          title="总流水（元）"
+          :value="item.channel.totalIncome"
+        />
       </div>
     </div>
   </div>
@@ -60,6 +74,7 @@ export default defineComponent({
 <style scoped lang="scss">
 @import '@/styles/variables.module.scss';
 
+$minWidth: 200px;
 .vtuber-card-wrap {
   width: 80%;
   display: flex;
@@ -69,9 +84,11 @@ export default defineComponent({
 
   .vtuber-card {
     display: flex;
+    justify-content: space-around;
     align-items: center;
     box-sizing: border-box;
     padding: 16px;
+    margin-bottom: 32px;
     width: 100%;
     border-radius: 4px;
     box-shadow: 1px 1px 4px 2px rgba(0, 0, 0, 0.6);
@@ -80,7 +97,7 @@ export default defineComponent({
     .vtuber-card-divider {
       box-sizing: border-box;
       width: 1px;
-      height: 100%;
+      height: 70%;
       background-color: rgba(255, 255, 255, 0.4);
     }
   }
@@ -89,7 +106,7 @@ export default defineComponent({
 .vtuber-info {
   box-sizing: border-box;
   padding-right: 8px;
-  min-width: 200px;
+  min-width: $minWidth;
   text-align: center;
 
   .vtuber-avatar {
@@ -120,12 +137,12 @@ export default defineComponent({
   }
 }
 
-.vtuber-data{
-  .vtuber-data-title{
-
-  }
-  .vtuber-data-content{
-
-  }
+.vtuber-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: $minWidth;
 }
 </style>

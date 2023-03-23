@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref ,onMounted} from 'vue'
 
 import VtuberCard from './components/VtuberCard/index.vue'
 
@@ -10,21 +10,17 @@ const vtuberUidList = getVtuberUidList()
 const loading = ref(true)
 
 const vtuberList: object[] = reactive([])
-// getChannelDetail({ uId: vtuberUidList[0], includeExtra: true }).then(res => {
-//   console.log(res)
-//   vtuberList.push(res)
-//   loading.value = false
-// })
-// getChannelDetail({ uId: vtuberUidList[1], includeExtra: true }).then(res => {
-//   console.log(res)
-//   vtuberList.push(res)
-//   loading.value = false
-// })
-// getChannelDetail({ uId: vtuberUidList[2], includeExtra: true }).then(res => {
-//   console.log(res)
-//   vtuberList.push(res)
-//   loading.value = false
-// })
+const getVtuberDetail = async () => {
+  for (const item of vtuberUidList) {
+    await getChannelDetail({ uId: item, includeExtra: true }).then(res => {
+      vtuberList[vtuberUidList.findIndex(uid => uid === item)] = res
+      loading.value = false
+    })
+  }
+}
+onMounted(()=>{
+  getVtuberDetail()
+})
 </script>
 
 <script lang="ts">
@@ -43,11 +39,11 @@ export default defineComponent({
       animated
     >
       <template #template>
-        <div style="padding: 16px;">
+        <div style="padding: 16px">
           <div>
             <el-skeleton-item
               variant="circle"
-              style="width: 80px; height: 80px;border-radius: 40px"
+              style="width: 80px; height: 80px; border-radius: 40px"
             />
             <el-skeleton-item
               variant="h3"

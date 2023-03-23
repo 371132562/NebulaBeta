@@ -32,5 +32,8 @@ export default defineConfig({
     alias: {
       '@': '/src'
     }
+  },
+  build: {
+    sourcemap: true
   }
 })
