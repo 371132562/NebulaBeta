@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 
 import VtuberCard from './components/VtuberCard/index.vue'
 
@@ -7,9 +7,6 @@ import { useVtuberStore } from '@/stores/vtuber'
 
 const vtuberStore = useVtuberStore()
 const { getVtuberDetail, vtuberDetailList } = vtuberStore
-const loading = ref(true)
-
-const vtuberList: object[] = reactive([])
 
 onMounted(() => {
   getVtuberDetail()
