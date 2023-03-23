@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { getChannelDetail } from '@/api/vtuber'
 import { getVtuberUidList } from '@/config/common'
 
-export const useVtuberStore = defineStore('vtuber', {
+const vtuberStore = defineStore('vtuber', {
   state: () => ({ vtuberDetailList: [] }),
   getters: {},
   actions: {
@@ -15,4 +15,7 @@ export const useVtuberStore = defineStore('vtuber', {
       }
     }
   }
-})
+})()
+const { vtuberDetailList } = storeToRefs(vtuberStore)
+const { getVtuberDetail } = vtuberStore
+export { vtuberDetailList, getVtuberDetail }

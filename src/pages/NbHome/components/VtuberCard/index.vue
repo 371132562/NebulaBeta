@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { useVtuberStore } from '@/stores/vtuber'
-
-const vtuberStore = useVtuberStore()
-const { vtuberDetailList } = vtuberStore
+import { vtuberDetailList } from '@/stores/vtuber'
 </script>
 
 <script lang="ts">
