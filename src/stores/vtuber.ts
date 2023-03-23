@@ -7,15 +7,20 @@ const vtuberStore = defineStore('vtuber', {
   getters: {},
   actions: {
     async getVtuberDetail() {
-      const vtuberUidList = getVtuberUidList()
-      for (const item of vtuberUidList) {
-        await getChannelDetail({ uId: item, includeExtra: true }).then(res => {
-          this.vtuberDetailList.push(res)
-        })
+      if (this.vtuberDetailList.length === 0) {
+        const vtuberUidList = getVtuberUidList()
+        for (const item of vtuberUidList) {
+          await getChannelDetail({ uId: item, includeExtra: true }).then(
+            res => {
+              this.vtuberDetailList.push(res)
+            }
+          )
+        }
       }
     }
   }
 })()
 const { vtuberDetailList } = storeToRefs(vtuberStore)
 const { getVtuberDetail } = vtuberStore
+
 export { vtuberDetailList, getVtuberDetail }

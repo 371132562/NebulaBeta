@@ -85,7 +85,7 @@ $minWidth: 200px;
     margin-bottom: 32px;
     width: 100%;
     border-radius: 4px;
-    box-shadow: 1px 1px 4px 2px rgba(0, 0, 0, 0.6);
+    box-shadow: 1px 1px 10px 4px rgba(0, 0, 0, 0.6);
     background-color: #00adb5;
 
     .vtuber-card-divider {
