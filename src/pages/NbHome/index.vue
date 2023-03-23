@@ -1,24 +1,17 @@
 <script setup lang="ts">
-import { reactive, ref ,onMounted} from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 
 import VtuberCard from './components/VtuberCard/index.vue'
 
-import { getChannelDetail } from '@/api/vtuber'
-import { getVtuberUidList } from '@/config/common.js'
+import { useVtuberStore } from '@/stores/vtuber'
 
-const vtuberUidList = getVtuberUidList()
+const vtuberStore = useVtuberStore()
+const { getVtuberDetail, vtuberDetailList } = vtuberStore
 const loading = ref(true)
 
 const vtuberList: object[] = reactive([])
-const getVtuberDetail = async () => {
-  for (const item of vtuberUidList) {
-    await getChannelDetail({ uId: item, includeExtra: true }).then(res => {
-      vtuberList[vtuberUidList.findIndex(uid => uid === item)] = res
-      loading.value = false
-    })
-  }
-}
-onMounted(()=>{
+
+onMounted(() => {
   getVtuberDetail()
 })
 </script>
@@ -35,7 +28,7 @@ export default defineComponent({
   <div class="home-wrap">
     <el-skeleton
       style="width: 80%"
-      :loading="loading"
+      :loading="vtuberDetailList.length === 0"
       animated
     >
       <template #template>
@@ -89,7 +82,7 @@ export default defineComponent({
         </div>
       </template>
       <template #default>
-        <vtuber-card :vtuber-list="vtuberList" />
+        <vtuber-card />
       </template>
     </el-skeleton>
   </div>

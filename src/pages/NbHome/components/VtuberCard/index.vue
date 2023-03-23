@@ -1,26 +1,23 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useVtuberStore } from '@/stores/vtuber'
+
+const vtuberStore = useVtuberStore()
+const { vtuberDetailList } = vtuberStore
+</script>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'VtuberCard',
-  props: {
-    vtuberList: {
-      type: Array,
-      required: true,
-      default() {
-        return []
-      }
-    }
-  }
+  props: {}
 })
 </script>
 
 <template>
   <div class="vtuber-card-wrap">
     <div
-      v-for="(item, index) in vtuberList"
+      v-for="(item, index) in vtuberDetailList"
       :key="index"
       class="vtuber-card"
     >
