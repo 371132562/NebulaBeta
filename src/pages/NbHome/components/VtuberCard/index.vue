@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { vtuberDetailList } from '@/stores/vtuber'
 
-const sortMethod = ref('默认')
+const sortMethod = ref('')
 
 const sortField = [
   { label: '默认', value: '' },
@@ -95,6 +95,10 @@ export default defineComponent({
               class="vtuber-info-stream"
               @click.stop="jumpToChannel"
             >
+              <img
+                src="@/assets/images/live.gif"
+                alt=""
+              >
               直播中
             </div>
           </div>
@@ -151,7 +155,8 @@ $wrapWidth: 80%;
   display: flex;
   align-items: center;
   margin-bottom: 16px;
-  .vtuber-card-sort-label{
+
+  .vtuber-card-sort-label {
     font-size: 14px;
   }
 }
@@ -173,7 +178,7 @@ $wrapWidth: 80%;
     width: 100%;
     border-radius: 4px;
     box-shadow: 1px 1px 10px 4px rgba(0, 0, 0, 0.6);
-    background-color: #00adb5;
+    background-color: #609764;
 
     .vtuber-card-divider {
       box-sizing: border-box;
@@ -193,12 +198,12 @@ $wrapWidth: 80%;
 
   .vtuber-avatar {
     position: relative;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
   }
 
   .vtuber-info-stream {
     position: absolute;
-    bottom: 0;
+    bottom: -10px;
     left: 50%;
     transform: translate(-50%, 0);
     box-sizing: border-box;
@@ -209,8 +214,12 @@ $wrapWidth: 80%;
     color: #fff;
     //border: 1px solid rgba(255,255,255,0.7);
     border-radius: 6px;
-    background-color: #ea5455;
+    background-color: #f69;
     box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.7);
+
+    img {
+      width: 10px;
+    }
   }
 
   .vtuber-info-text {

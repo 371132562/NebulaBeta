@@ -1,5 +1,3 @@
-import path from 'path'
-
 import vue from '@vitejs/plugin-vue'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import AutoImport from 'unplugin-auto-import/vite'

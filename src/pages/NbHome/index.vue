@@ -6,7 +6,7 @@ import VtuberCard from './components/VtuberCard/index.vue'
 import { getVtuberDetail, vtuberDetailList } from '@/stores/vtuber'
 
 onMounted(() => {
-  // getVtuberDetail()
+  getVtuberDetail()
 })
 </script>
 
