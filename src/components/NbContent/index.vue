@@ -1,4 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { getVtuberDetail } from "@/stores/vtuber"
+
+onMounted(() => {
+  getVtuberDetail()
+})
+</script>
 
 <script lang="ts">
 import { defineComponent } from 'vue'

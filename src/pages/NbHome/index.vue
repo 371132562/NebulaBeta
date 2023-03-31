@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-
 import VtuberCard from './components/VtuberCard/index.vue'
 
-import { getVtuberDetail, vtuberDetailList } from '@/stores/vtuber'
-
-onMounted(() => {
-  getVtuberDetail()
-})
+import { vtuberDetailList } from '@/stores/vtuber'
 </script>
 
 <script lang="ts">
