@@ -112,7 +112,7 @@ export default defineComponent({
         <el-statistic
           title="总时长（时）"
           :value="item.channel.totalLiveSecond / (60 * 60)"
-          precision="2"
+          :precision="2"
         />
       </div>
       <div class="vtuber-card-divider" />
@@ -120,7 +120,7 @@ export default defineComponent({
         <el-statistic
           title="总直播场次"
           :value="item.channel.totalLiveCount"
-          precision="2"
+          :precision="2"
         />
       </div>
       <div class="vtuber-card-divider" />
@@ -177,8 +177,7 @@ $wrapWidth: 80%;
     margin-bottom: 32px;
     width: 100%;
     border-radius: 4px;
-    box-shadow: 1px 1px 10px 4px rgba(0, 0, 0, 0.6);
-    background-color: #609764;
+    background-color: rgba(255, 255, 255, 0.15);
 
     .vtuber-card-divider {
       box-sizing: border-box;

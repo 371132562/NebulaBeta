@@ -48,23 +48,23 @@ export default defineComponent({
 </script>
 
 <template>
-  <el-date-picker
-    v-model="selectedDate"
-    :shortcuts="shortcuts"
-    type="daterange"
-    unlink-panels
-    range-separator="-"
-    start-placeholder="开始日期"
-    end-placeholder="结束日期"
-    value-format="x"
-  />
-  <el-button
-    :style="{ 'vertical-align': 'baseline', 'margin-left': '8px' }"
-    :icon="Search"
-    @click="searchByDate"
-  >
-    按日期查询
-  </el-button>
+<!--  <el-date-picker-->
+<!--    v-model="selectedDate"-->
+<!--    :shortcuts="shortcuts"-->
+<!--    type="daterange"-->
+<!--    unlink-panels-->
+<!--    range-separator="-"-->
+<!--    start-placeholder="开始日期"-->
+<!--    end-placeholder="结束日期"-->
+<!--    value-format="x"-->
+<!--  />-->
+<!--  <el-button-->
+<!--    :style="{ 'vertical-align': 'baseline', 'margin-left': '8px' }"-->
+<!--    :icon="Search"-->
+<!--    @click="searchByDate"-->
+<!--  >-->
+<!--    按日期查询-->
+<!--  </el-button>-->
 </template>
 
 <style scoped lang="scss"></style>

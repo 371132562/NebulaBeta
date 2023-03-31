@@ -3,9 +3,9 @@ import { House, SwitchFilled, Search, Warning } from '@element-plus/icons-vue'
 
 export const menu: { name: string; icon: any; path: string }[] = [
   { name: '主页', icon: House, path: '/home' },
-  { name: '查询', icon: Search, path: '/' },
-  { name: '斗虫', icon: SwitchFilled, path: '/' },
-  { name: '关于', icon: Warning, path: '/' }
+  { name: '查询', icon: Search, path: '/detail' },
+  { name: '斗虫', icon: SwitchFilled, path: '/battle' },
+  { name: '关于', icon: Warning, path: '/about' }
 ]
 
 //主播list
