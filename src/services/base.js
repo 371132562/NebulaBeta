@@ -1,5 +1,5 @@
 import axios from 'axios'
-// axios实例1
+// axios实例
 const http = axios.create({
   //   baseURL: '',
   timeout: 30000

@@ -1,5 +1,6 @@
-import { defineStore } from 'pinia'
+import pinia from '@/stores'
 import { reactive } from 'vue'
+import { defineStore, storeToRefs } from 'pinia'
 import { getChannelDetail } from '@/services/vtuber'
 import { getVtuberUidList } from '@/config/common'
 
@@ -23,6 +24,7 @@ const vtuberStore = defineStore('vtuber', () => {
 
   //
   return { vtuberDetailList, getVtuberDetail }
-})
+})(pinia)
 
-export default vtuberStore
+export const { vtuberDetailList } = storeToRefs(vtuberStore)
+export const { getVtuberDetail } = vtuberStore

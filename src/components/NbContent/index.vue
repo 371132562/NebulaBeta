@@ -1,9 +1,8 @@
 <script setup>
 import { onMounted } from 'vue'
-import useVtuberStore from '@/stores/vtuber'
-const vtuberStore = useVtuberStore()
+import {getVtuberDetail} from '@/stores/vtuber'
 onMounted(() => {
-  vtuberStore.getVtuberDetail()
+  getVtuberDetail()
 })
 </script>
 

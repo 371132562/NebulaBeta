@@ -1,7 +1,6 @@
 <script setup>
 import VtuberCard from './components/VtuberCard/index.vue'
-import useVtuberStore from '@/stores/vtuber'
-const vtuberStore = useVtuberStore()
+import { vtuberDetailList } from '@/stores/vtuber'
 </script>
 
 <script>
@@ -15,11 +14,8 @@ export default defineComponent({
 <template>
   <div class="home-wrap">
     <VtuberCard />
-    <template v-if="vtuberStore.vtuberDetailList.length < 8">
-      <el-skeleton
-        style="width: 80%"
-        animated
-      >
+    <template v-if="vtuberDetailList.length < 8">
+      <el-skeleton style="width: 80%" animated>
         <template #template>
           <div style="padding: 16px">
             <div>
@@ -27,10 +23,7 @@ export default defineComponent({
                 variant="circle"
                 style="width: 80px; height: 80px; border-radius: 40px"
               />
-              <el-skeleton-item
-                variant="h3"
-                style="width: 80%"
-              />
+              <el-skeleton-item variant="h3" style="width: 80%" />
             </div>
             <div
               :style="{
@@ -41,14 +34,8 @@ export default defineComponent({
                 height: '16px'
               }"
             >
-              <el-skeleton-item
-                variant="p"
-                style="margin-right: 16px"
-              />
-              <el-skeleton-item
-                variant="p"
-                style="width: 30%"
-              />
+              <el-skeleton-item variant="p" style="margin-right: 16px" />
+              <el-skeleton-item variant="p" style="width: 30%" />
             </div>
             <div
               :style="{
@@ -59,14 +46,8 @@ export default defineComponent({
                 height: '16px'
               }"
             >
-              <el-skeleton-item
-                variant="p"
-                style="margin-right: 16px"
-              />
-              <el-skeleton-item
-                variant="p"
-                style="width: 70%"
-              />
+              <el-skeleton-item variant="p" style="margin-right: 16px" />
+              <el-skeleton-item variant="p" style="width: 70%" />
             </div>
           </div>
         </template>

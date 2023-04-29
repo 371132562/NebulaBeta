@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import useVtuberStore from '@/stores/vtuber'
-const vtuberStore = useVtuberStore()
+import { vtuberDetailList } from '@/stores/vtuber'
 
 const sortMethod = ref('')
 
@@ -19,26 +18,26 @@ const sortField = [
 const sortedList = computed(() => {
   switch (sortMethod.value) {
   case 'totalLiveSecond':
-    return vtuberStore.vtuberDetailList.sort((a, b) => {
+    return vtuberDetailList.value.sort((a, b) => {
       return b.channel.totalLiveSecond - a.channel.totalLiveSecond
     })
   case 'totalLiveCount':
-    return vtuberStore.vtuberDetailList.sort((a, b) => {
+    return vtuberDetailList.value.sort((a, b) => {
       return b.channel.totalLiveCount - a.channel.totalLiveCount
     })
   case 'totalIncome':
-    return vtuberStore.vtuberDetailList.sort((a, b) => {
+    return vtuberDetailList.value.sort((a, b) => {
       return b.channel.totalIncome - a.channel.totalIncome
     })
   case 'averageIncome':
-    return vtuberStore.vtuberDetailList.sort((a, b) => {
+    return vtuberDetailList.value.sort((a, b) => {
       return (
         b.channel.totalIncome / (b.channel.totalLiveSecond / (60 * 60)) -
           a.channel.totalIncome / (a.channel.totalLiveSecond / (60 * 60))
       )
     })
   default:
-    return vtuberStore.vtuberDetailList
+    return vtuberDetailList.value
   }
 })
 const jumpToDetail = () => {

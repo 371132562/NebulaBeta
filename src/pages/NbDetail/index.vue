@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import dayjs from 'dayjs'
 
-import { Search } from '@element-plus/icons-vue'
+import {Search } from '@element-plus/icons-vue'
 
 //时间选择器数据
 const selectedDate = ref([
