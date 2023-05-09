@@ -1,5 +1,5 @@
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup>
+import { ref } from 'vue'
 import dayjs from 'dayjs'
 
 import { Search } from '@element-plus/icons-vue'
@@ -40,14 +40,13 @@ const searchByDate = () => {
 }
 
 const disabledData = (
-  date: string | number | dayjs.Dayjs | Date | null | undefined
-) => {
-  //禁用今天之后的日期
+  date
+) => {//禁用今天之后的日期
   return dayjs('2023-03-31').endOf('d').valueOf() < dayjs(date).valueOf()
 }
 </script>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
 
 export default defineComponent({

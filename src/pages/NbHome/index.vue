@@ -1,10 +1,10 @@
-<script setup lang="ts">
+<script setup>
 import VtuberCard from './components/VtuberCard/index.vue'
-
-import { vtuberDetailList } from '@/stores/vtuber'
+import useVtuberStore from '@/stores/vtuber'
+const vtuberStore = useVtuberStore()
 </script>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -15,7 +15,7 @@ export default defineComponent({
 <template>
   <div class="home-wrap">
     <VtuberCard />
-    <template v-if="vtuberDetailList.length < 8">
+    <template v-if="vtuberStore.vtuberDetailList.length < 8">
       <el-skeleton
         style="width: 80%"
         animated

@@ -1,6 +1,7 @@
-<script setup lang="ts">
+<script setup>
 import { ref, computed } from 'vue'
-import { vtuberDetailList } from '@/stores/vtuber'
+import useVtuberStore from '@/stores/vtuber'
+const vtuberStore = useVtuberStore()
 
 const sortMethod = ref('')
 
@@ -18,26 +19,26 @@ const sortField = [
 const sortedList = computed(() => {
   switch (sortMethod.value) {
   case 'totalLiveSecond':
-    return vtuberDetailList.value.sort((a, b) => {
+    return vtuberStore.vtuberDetailList.sort((a, b) => {
       return b.channel.totalLiveSecond - a.channel.totalLiveSecond
     })
   case 'totalLiveCount':
-    return vtuberDetailList.value.sort((a, b) => {
+    return vtuberStore.vtuberDetailList.sort((a, b) => {
       return b.channel.totalLiveCount - a.channel.totalLiveCount
     })
   case 'totalIncome':
-    return vtuberDetailList.value.sort((a, b) => {
+    return vtuberStore.vtuberDetailList.sort((a, b) => {
       return b.channel.totalIncome - a.channel.totalIncome
     })
   case 'averageIncome':
-    return vtuberDetailList.value.sort((a, b) => {
+    return vtuberStore.vtuberDetailList.sort((a, b) => {
       return (
         b.channel.totalIncome / (b.channel.totalLiveSecond / (60 * 60)) -
           a.channel.totalIncome / (a.channel.totalLiveSecond / (60 * 60))
       )
     })
   default:
-    return vtuberDetailList.value
+    return vtuberStore.vtuberDetailList
   }
 })
 const jumpToDetail = () => {
@@ -48,7 +49,7 @@ const jumpToChannel = () => {
 }
 </script>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
 
 export default defineComponent({

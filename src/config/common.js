@@ -1,7 +1,7 @@
 //头部菜单
 import { House, SwitchFilled, Search, Warning } from '@element-plus/icons-vue'
 
-export const menu: { name: string; icon: any; path: string }[] = [
+export const menu = [
   { name: '主页', icon: House, path: '/home' },
   { name: '查询', icon: Search, path: '/detail' },
   { name: '斗虫', icon: SwitchFilled, path: '/battle' },

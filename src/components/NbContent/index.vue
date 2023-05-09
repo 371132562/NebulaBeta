@@ -1,13 +1,13 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted } from 'vue'
-import { getVtuberDetail } from "@/stores/vtuber"
-
+import useVtuberStore from '@/stores/vtuber'
+const vtuberStore = useVtuberStore()
 onMounted(() => {
-  getVtuberDetail()
+  vtuberStore.getVtuberDetail()
 })
 </script>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'NbContent'

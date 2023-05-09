@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import NbLayout from '@/components/NbLayout/index.vue'
 </script>

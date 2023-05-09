@@ -1,8 +1,8 @@
-<script setup lang="ts">
+<script setup>
 import { menu } from '@/config/common'
 </script>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
 
 export default defineComponent({
