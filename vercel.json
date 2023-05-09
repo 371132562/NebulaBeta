@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/notion-api/(.*)",
-      "destination": "/proxy"
-    }
-  ]
-}
