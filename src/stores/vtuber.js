@@ -1,7 +1,7 @@
 import pinia from '@/stores'
 import { reactive } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
-import { getChannelDetail } from '@/services/vtuber'
+import { getChannelDetail } from '@api/vtuber'
 import { getVtuberUidList } from '@/config/common'
 
 const vtuberStore = defineStore('vtuber', () => {
