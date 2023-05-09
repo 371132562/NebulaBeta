@@ -47,7 +47,8 @@ export default defineComponent({
     cursor: pointer;
     color: $text-color;
     text-decoration: none;
-    transition: color 0.3s cubic-bezier(0.33, 1, 0.68, 1), border-color 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+    transition: color 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+      border-color 0.3s cubic-bezier(0.33, 1, 0.68, 1);
 
     &:hover {
       color: $text-color-active;

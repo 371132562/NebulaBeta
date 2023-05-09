@@ -1,6 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { vtuberDetailList } from '@/stores/vtuber'
+
+const router = useRouter()
 
 const sortMethod = ref('')
 
@@ -40,9 +43,11 @@ const sortedList = computed(() => {
     return vtuberDetailList.value
   }
 })
-const jumpToDetail = () => {
-  console.log(1)
+
+const jumpToDetail = uId => {
+  router.push({ path: '/detail', query: { uid: uId } })
 }
+
 const jumpToChannel = () => {
   console.log(2)
 }
@@ -81,7 +86,7 @@ export default defineComponent({
     >
       <div
         class="vtuber-info"
-        @click.prevent="jumpToDetail"
+        @click.prevent="jumpToDetail(item.channel.uId)"
       >
         <div>
           <div class="vtuber-avatar">

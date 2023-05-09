@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
-import {getVtuberDetail} from '@/stores/vtuber'
+import { getVtuberDetail } from '@/stores/vtuber'
 onMounted(() => {
   getVtuberDetail()
 })
