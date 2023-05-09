@@ -1,4 +1,4 @@
-import http from '@/services/base'
+import http from './base'
 
 //根据uid获取直播信息
 export const getChannelDetail = (params = {}) => {
