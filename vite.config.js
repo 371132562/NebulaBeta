@@ -38,6 +38,18 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src')
     }
   },
+  server:{
+    proxy:{
+      '/ukamnads.icu': {
+        target: 'https://ukamnads.icu',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/ukamnads.icu/, ''),
+      },
+    }
+  },
+  build: {
+    sourcemap: true
+  },
   css: {
     preprocessorOptions: {
       scss: {
@@ -45,7 +57,4 @@ export default defineConfig({
       }
     }
   },
-  build: {
-    sourcemap: true
-  }
 })
