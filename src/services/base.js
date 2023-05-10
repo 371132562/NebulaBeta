@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { ElNotification } from 'element-plus'
+
 // axios实例
 const http = axios.create({
   //   baseURL: '',
@@ -15,6 +17,11 @@ http.interceptors.response.use(
     return response
   },
   error => {
+    ElNotification({
+      title: `${error.code}`,
+      message: `${error.config.url}`,
+      type: 'error',
+    })
     console.log(error)
     return Promise.reject(error)
   }
