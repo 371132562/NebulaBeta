@@ -14,9 +14,5 @@ module.exports = (req, res) => {
   createProxyMiddleware({
     target,
     changeOrigin: true,
-    pathRewrite: {
-      // 通过路径重写，去除请求路径中的 `/api`
-      '^/ukamnads.icu': ''
-    }
   })(req, res)
 }
