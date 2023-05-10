@@ -9,6 +9,18 @@ import progress from 'vite-plugin-progress'
 import colors from 'picocolors'
 
 export default defineConfig({
+  resolve: {
+    // 配置路径别名
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
+  },
+  server: {
+    host: '0.0.0.0',
+  },
+  build: {
+    sourcemap: true
+  },
   plugins: [
     vue(),
     splitVendorChunkPlugin(),
@@ -32,20 +44,11 @@ export default defineConfig({
       width: 50
     })
   ],
-  resolve: {
-    // 配置路径别名
-    alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  },
   css: {
     preprocessorOptions: {
       scss: {
         additionalData: `@use "@/styles/element/index.scss" as *;`
       }
     }
-  },
-  build: {
-    sourcemap: true
   }
 })
