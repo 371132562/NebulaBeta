@@ -4,8 +4,8 @@ import { ElNotification } from 'element-plus'
 // axios实例
 const http = axios.create({
   //   baseURL: '',
-  timeout: 30000
-  //   withCredentials: true
+  timeout: 30000,
+  withCredentials: true
 })
 
 http.interceptors.response.use(
