@@ -12,13 +12,13 @@ module.exports = {
     sourceType: 'module',
     ecmaVersion: 'latest'
   },
-  // overrides: [
-  //   {
-  //     files: ['*.js'],
-  //     plugins: ['prettier'],
-  //     extends: ['eslint:recommended', 'plugin:prettier/recommended']
-  //   }
-  // ],
+  overrides: [
+    {
+      files: ['*.js'],
+      plugins: ['prettier'],
+      extends: ['eslint:recommended', 'plugin:prettier/recommended']
+    }
+  ],
   rules: {
     indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],

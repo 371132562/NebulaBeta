@@ -45,7 +45,7 @@ const sortedList = computed(() => {
 })
 
 const jumpToDetail = uId => {
-  router.push({ path: '/detail', query: { uid: uId } })
+  router.push({ path: '/detail', query: { uId } })
 }
 
 const jumpToChannel = () => {

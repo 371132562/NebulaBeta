@@ -1,6 +1,6 @@
 <script setup>
-import NbHeader from '@/components/NbHeader/index.vue'
-import NbContent from '@/components/NbContent/index.vue'
+import NbHeader from '@/components/NbLayout/components/NbHeader/index.vue'
+import NbContent from '@/components/NbLayout/components/NbContent/index.vue'
 </script>
 
 <script>
