@@ -1,7 +1,13 @@
 <script setup>
+import { onMounted } from 'vue'
+import { vtuberList, initVtuberList } from '@/hooks/useVtuber'
+import { uIdList } from '@/config/constants'
 import VtuberCard from './components/VtuberCard/index.vue'
-import { vtuberDetailList } from '@/stores/vtuber'
 import NbSkeleton from '@/components/NbSkeleton/index.vue'
+
+onMounted(() => {
+  initVtuberList()
+})
 </script>
 
 <script>
@@ -15,7 +21,7 @@ export default defineComponent({
 <template>
   <div class="home-wrap">
     <VtuberCard />
-    <NbSkeleton :if-condition="vtuberDetailList.length < 8" />
+    <NbSkeleton :if-condition="vtuberList.length < uIdList.length" />
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { vtuberDetailList } from '@/stores/vtuber'
+import { vtuberList } from '@/hooks/useVtuber'
 
 const router = useRouter()
 
@@ -20,27 +20,27 @@ const sortField = [
 
 const sortedList = computed(() => {
   switch (sortMethod.value) {
-  case 'totalLiveSecond':
-    return vtuberDetailList.value.sort((a, b) => {
-      return b.channel.totalLiveSecond - a.channel.totalLiveSecond
-    })
-  case 'totalLiveCount':
-    return vtuberDetailList.value.sort((a, b) => {
-      return b.channel.totalLiveCount - a.channel.totalLiveCount
-    })
-  case 'totalIncome':
-    return vtuberDetailList.value.sort((a, b) => {
-      return b.channel.totalIncome - a.channel.totalIncome
-    })
-  case 'averageIncome':
-    return vtuberDetailList.value.sort((a, b) => {
-      return (
-        b.channel.totalIncome / (b.channel.totalLiveSecond / (60 * 60)) -
+    case 'totalLiveSecond':
+      return vtuberList.sort((a, b) => {
+        return b.channel.totalLiveSecond - a.channel.totalLiveSecond
+      })
+    case 'totalLiveCount':
+      return vtuberList.sort((a, b) => {
+        return b.channel.totalLiveCount - a.channel.totalLiveCount
+      })
+    case 'totalIncome':
+      return vtuberList.sort((a, b) => {
+        return b.channel.totalIncome - a.channel.totalIncome
+      })
+    case 'averageIncome':
+      return vtuberList.sort((a, b) => {
+        return (
+          b.channel.totalIncome / (b.channel.totalLiveSecond / (60 * 60)) -
           a.channel.totalIncome / (a.channel.totalLiveSecond / (60 * 60))
-      )
-    })
-  default:
-    return vtuberDetailList.value
+        )
+      })
+    default:
+      return vtuberList
   }
 })
 
@@ -64,9 +64,7 @@ export default defineComponent({
 
 <template>
   <div class="vtuber-card-sort">
-    <div class="vtuber-card-sort-label">
-      排序方式：
-    </div>
+    <div class="vtuber-card-sort-label">排序方式：</div>
     <el-radio-group v-model="sortMethod">
       <template
         v-for="item in sortField"
@@ -103,7 +101,7 @@ export default defineComponent({
               <img
                 src="@/assets/images/live.gif"
                 alt=""
-              >
+              />
               直播中
             </div>
           </div>
@@ -140,7 +138,7 @@ export default defineComponent({
           title="平均流水（元/时）"
           :value="
             item.channel.totalIncome /
-              (item.channel.totalLiveSecond / (60 * 60))
+            (item.channel.totalLiveSecond / (60 * 60))
           "
         />
       </div>

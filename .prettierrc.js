@@ -12,5 +12,6 @@ module.exports = {
     // 对象大括号直接是否有空格，默认为true，效果：{ foo: bar }
     bracketSpacing: true,
     bracketSameLine: false,
-    arrowParens: 'avoid'
+    arrowParens: 'avoid',
+    singleAttributePerLine: true, //Enforce single attribute per line in HTML, Vue and JSX.
 }

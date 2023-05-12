@@ -1,5 +1,5 @@
 <script setup>
-import { menu } from '@/config/common'
+import { menu } from '@/config/constants'
 </script>
 
 <script>

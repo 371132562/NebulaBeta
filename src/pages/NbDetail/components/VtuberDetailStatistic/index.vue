@@ -1,12 +1,10 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "VtuberDetailStatistic"
+  name: 'VtuberDetailStatistic'
 })
 </script>
 
@@ -154,5 +152,4 @@ export default defineComponent({
     }
   }
 }
-
 </style>

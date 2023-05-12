@@ -20,7 +20,7 @@ http.interceptors.response.use(
     ElNotification({
       title: `${error.code}`,
       message: `${error.config.url}`,
-      type: 'error',
+      type: 'error'
     })
     console.log(error)
     return Promise.reject(error)

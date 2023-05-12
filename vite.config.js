@@ -17,12 +17,12 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    proxy:{
+    proxy: {
       '/ukamnads.icu': {
         target: 'https://ukamnads.icu',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/ukamnads.icu/, ''),
-      },
+        rewrite: path => path.replace(/^\/ukamnads.icu/, '')
+      }
     }
   },
   build: {
