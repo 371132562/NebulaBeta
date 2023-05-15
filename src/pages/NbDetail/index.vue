@@ -1,9 +1,9 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
-import { Search } from '@element-plus/icons-vue'
 
+import { dateShortcuts } from '@/config/constants'
 import {
   allVtuberList,
   vtuberList,
@@ -13,77 +13,78 @@ import VtuberDetailStatistic from '@/pages/NbDetail/components/VtuberDetailStati
 import NbSkeleton from '@/components/NbSkeleton/index.vue'
 
 const router = useRouter()
-const { uId } = router.currentRoute.value.query
 
-onMounted(() => {
-  if (!vtuberList.value.find(item => item.uId === uId)) {
-    getVtuberDetailById(uId)
-  }
+//当前路由uId
+const uId = computed(() => {
+  return +router.currentRoute.value.query.uId || null
 })
 
 const currentVtuber = computed(() => {
-  return vtuberList.value.find(item => item.uId === +uId)
+  if (uId.value) {
+    if (selectedDate.value && selectedDate.value[0] && selectedDate.value[1]) {
+      const vtuber = vtuberList.value.find(item => item.uId === uId.value)
+      const { fansHistory = [], guardHistory = [], lives = [] } = vtuber
+      return {
+        isFilter: true,
+        ...vtuber,
+        fansHistory: fansHistory.filter(item => {
+          return (
+            dayjs(item.time).valueOf() >=
+              dayjs(selectedDate.value[0]).valueOf() &&
+            dayjs(item.time).valueOf() <= dayjs(selectedDate.value[1]).valueOf()
+          )
+        }),
+        guardHistory: guardHistory.filter(item => {
+          return (
+            dayjs(item.time).valueOf() >=
+              dayjs(selectedDate.value[0]).valueOf() &&
+            dayjs(item.time).valueOf() <= dayjs(selectedDate.value[1]).valueOf()
+          )
+        }),
+        lives: lives.filter(item => {
+          return (
+            dayjs(item.startDate).valueOf() >=
+              dayjs(selectedDate.value[0]).valueOf() &&
+            dayjs(item.startDate).valueOf() <=
+              dayjs(selectedDate.value[1]).valueOf()
+          )
+        })
+      }
+    } else {
+      return vtuberList.value.find(item => item.uId === uId.value)
+    }
+  } else {
+    return undefined
+  }
 })
 
-//选择的主播的uId
-const currentVtuberUId = ref(+uId || null)
+//当前选择的主播的uId
+const currentVtuberUId = ref(uId.value || null)
 
 //时间选择器数据
-const selectedDate = ref([
-  dayjs().valueOf() - 3600 * 24 * 7 * 1000,
-  dayjs().valueOf()
-])
-//快捷选项
-const shortcuts = [
-  {
-    text: '最近7天',
-    value: () => {
-      const end = dayjs().valueOf()
-      return [end - 3600 * 24 * 7 * 1000, end]
+const selectedDate = ref(['', ''])
+
+watch(
+  uId,
+  () => {
+    if (uId.value) {
+      getVtuberDetailById(uId.value)
     }
   },
-  {
-    text: '最近15天',
-    value: () => {
-      const end = dayjs().valueOf()
-      return [end - 3600 * 24 * 15 * 1000, end]
-    }
-  },
-  {
-    text: '最近30天',
-    value: () => {
-      const end = dayjs().valueOf()
-      return [end - 3600 * 24 * 30 * 1000, end]
-    }
-  },
-  {
-    text: '最近60天',
-    value: () => {
-      const end = dayjs().valueOf()
-      return [end - 3600 * 24 * 60 * 1000, end]
-    }
-  },
-  {
-    text: '最近90天',
-    value: () => {
-      const end = dayjs().valueOf()
-      return [end - 3600 * 24 * 90 * 1000, end]
-    }
+  { immediate: true }
+)
+
+//禁用今天之后的日期,合并主播有记录的第一次直播时间为最早时间
+const disabledDate = date => {
+  if (currentVtuber.value && currentVtuber?.value?.lives.length) {
+    const { lives = [] } = currentVtuber.value
+    return (
+      dayjs().endOf('d').valueOf() < dayjs(date).valueOf() ||
+      dayjs(date).valueOf() < dayjs(lives[lives.length - 1].startDate).valueOf()
+    )
+  } else {
+    return dayjs().endOf('d').valueOf() < dayjs(date).valueOf()
   }
-]
-
-//按日期查询
-const searchByDate = () => {
-  console.log(selectedDate.value[1])
-}
-
-const disabledData = date => {
-  //禁用今天之后的日期
-  return dayjs('2023-03-31').endOf('d').valueOf() < dayjs(date).valueOf()
-}
-
-const goHomePage = () => {
-  router.push('/')
 }
 </script>
 
@@ -97,41 +98,7 @@ export default defineComponent({
 
 <template>
   <div class="detail-wrap">
-    <template v-if="uId">
-      <NbSkeleton :if-condition="!currentVtuber" />
-      <template v-if="currentVtuber">
-        <div class="detail-time-picker">
-          <el-select-v2
-            v-model="currentVtuberUId"
-            :options="allVtuberList"
-            filterable
-            placeholder="选择主播"
-            class="all-vtuber-select"
-            :height="400"
-            @change="() => router.push(`/detail?uId=${currentVtuberUId}`)"
-          />
-          <el-date-picker
-            v-model="selectedDate"
-            :shortcuts="shortcuts"
-            type="daterange"
-            unlink-panels
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            value-format="x"
-            :disabled-date="disabledData"
-          />
-          <el-button
-            :icon="Search"
-            @click="searchByDate"
-          >
-            按日期查询
-          </el-button>
-        </div>
-        <VtuberDetailStatistic :current-vtuber="currentVtuber" />
-      </template>
-    </template>
-    <template v-else>
+    <div class="detail-filter">
       <el-select-v2
         v-model="currentVtuberUId"
         :options="allVtuberList"
@@ -141,19 +108,37 @@ export default defineComponent({
         :height="400"
         @change="() => router.push(`/detail?uId=${currentVtuberUId}`)"
       />
-      <el-result
-        icon="warning"
-        title="没有可用的uId"
-      >
-        <template #extra>
-          <el-button
-            type="primary"
-            @click="goHomePage"
-            >返回
-          </el-button>
-        </template>
-      </el-result>
-    </template>
+      <el-date-picker
+        v-if="currentVtuber"
+        v-model="selectedDate"
+        :shortcuts="dateShortcuts"
+        type="daterange"
+        unlink-panels
+        range-separator="-"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        value-format="x"
+        :disabled-date="disabledDate"
+      />
+    </div>
+    <VtuberDetailStatistic
+      v-if="currentVtuber"
+      :current-vtuber="currentVtuber"
+    />
+    <el-result
+      v-if="!uId"
+      icon="warning"
+      title="没有可用的uId，请选择主播或返回主页"
+    >
+      <template #extra>
+        <el-button
+          type="primary"
+          @click="() => router.push('/')"
+          >返回
+        </el-button>
+      </template>
+    </el-result>
+    <NbSkeleton :if-condition="!currentVtuber && uId" />
   </div>
 </template>
 
@@ -168,7 +153,7 @@ export default defineComponent({
   margin-top: 40px;
   width: 100%;
 
-  .detail-time-picker {
+  .detail-filter {
     width: $wrapWidth;
     margin-bottom: 16px;
   }
@@ -176,5 +161,7 @@ export default defineComponent({
 
 .all-vtuber-select {
   width: 220px;
+  vertical-align: bottom;
+  margin-right: 8px;
 }
 </style>

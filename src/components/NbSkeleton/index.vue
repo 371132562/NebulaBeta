@@ -18,7 +18,7 @@ export default defineComponent({
 <template>
   <template v-if="ifCondition">
     <el-skeleton
-      style="width: 80%"
+      style="width: 85%"
       animated
     >
       <template #template>

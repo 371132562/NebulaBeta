@@ -30,11 +30,24 @@ const useVtuber = () => {
           extra: { fansHistory = [], guardHistory = [] },
           lives = []
         } = res.data
+        let fansCount = [
+          fansHistory[fansHistory.length - 2]?.follower || 0,
+          fansHistory[fansHistory.length - 1]?.follower || 0
+        ]
+        let guardCount = [
+          guardHistory[guardHistory.length - 2]?.guardNum || 0,
+          guardHistory[guardHistory.length - 1]?.guardNum || 0
+        ]
         vtuberList.value.push({
           uId: channel.uId,
+          uName: channel.uName,
+          faceUrl: channel.faceUrl,
+          isLiving: channel.isLiving,
           channel,
           fansHistory,
+          fansCount,
           guardHistory,
+          guardCount,
           lives
         })
       })

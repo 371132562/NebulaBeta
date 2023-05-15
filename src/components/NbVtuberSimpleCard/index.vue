@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import { CaretTop, CaretBottom } from '@element-plus/icons-vue'
 
 const router = useRouter()
 
@@ -7,8 +8,30 @@ defineProps({
   vtuberList: {
     type: Array,
     default: () => []
+  },
+  isDetail: {
+    type: Boolean,
+    default: false
   }
 })
+
+const cardData = vtuber => {
+  const { lives } = vtuber
+  const totalLiveCount = lives.length
+  const totalLiveTime =
+    lives.reduce((total, item) => total + (item.stopDate - item.startDate), 0) /
+    (1000 * 60 * 60)
+  const totalIncome = lives.reduce((total, item) => total + item.totalIncome, 0)
+  //平均流水
+  const averageIncome = totalIncome / totalLiveTime || 0
+  return {
+    ...vtuber,
+    totalLiveCount,
+    totalLiveTime,
+    totalIncome,
+    averageIncome
+  }
+}
 
 const jumpToDetail = uId => {
   router.push({ path: '/detail', query: { uId } })
@@ -33,20 +56,18 @@ export default defineComponent({
       v-for="(item, index) in vtuberList"
       :key="index"
       class="vtuber-card"
+      @click.prevent="jumpToDetail(cardData(item).uId)"
     >
-      <div
-        class="vtuber-info"
-        @click.prevent="jumpToDetail(item.channel.uId)"
-      >
+      <div class="vtuber-info">
         <div>
           <div class="vtuber-avatar">
             <el-avatar
               shape="circle"
               :size="60"
-              :src="item.channel.faceUrl"
+              :src="cardData(item).faceUrl"
             />
             <div
-              v-if="item.channel.isLiving"
+              v-if="cardData(item).isLiving"
               class="vtuber-info-stream"
               @click.stop="jumpToChannel"
             >
@@ -59,40 +80,91 @@ export default defineComponent({
           </div>
         </div>
         <div class="vtuber-info-text">
-          {{ item.channel.uName }}
+          {{ cardData(item).uName }}
         </div>
       </div>
       <div class="vtuber-card-divider" />
       <div class="vtuber-data">
         <el-statistic
-          title="总时长（时）"
-          :value="item.channel.totalLiveSecond / (60 * 60)"
+          :title="`${isDetail ? '' : '总'}时长（时）`"
+          :value="cardData(item).totalLiveTime"
           :precision="2"
         />
       </div>
       <div class="vtuber-card-divider" />
       <div class="vtuber-data">
         <el-statistic
-          title="总直播场次"
-          :value="item.channel.totalLiveCount"
+          :title="`${isDetail ? '' : '总'}直播场次`"
+          :value="cardData(item).totalLiveCount"
         />
       </div>
       <div class="vtuber-card-divider" />
       <div class="vtuber-data">
         <el-statistic
-          title="总流水（元）"
-          :value="item.channel.totalIncome"
+          :title="`${isDetail ? '' : '总'}流水（元）`"
+          :value="cardData(item).totalIncome"
         />
       </div>
       <div class="vtuber-card-divider" />
       <div class="vtuber-data">
         <el-statistic
           title="平均流水（元/时）"
-          :value="
-            item.channel.totalIncome /
-            (item.channel.totalLiveSecond / (60 * 60))
-          "
+          :value="cardData(item).averageIncome"
         />
+      </div>
+      <div class="vtuber-card-divider" />
+      <div class="vtuber-data">
+        <el-statistic
+          title="粉丝"
+          :value="cardData(item).fansCount[0]"
+        />
+        <div class="vtuber-data-footer">
+          对比昨日
+          <span
+            :class="
+              cardData(item).fansCount[0] <= cardData(item).fansCount[1]
+                ? 'red'
+                : 'green'
+            "
+          >
+            {{ cardData(item).fansCount[1] - cardData(item).fansCount[0] }}
+            <el-icon>
+              <CaretTop
+                v-if="
+                  cardData(item).fansCount[0] <= cardData(item).fansCount[1]
+                "
+              />
+              <CaretBottom v-else />
+            </el-icon>
+          </span>
+        </div>
+      </div>
+      <div class="vtuber-card-divider" />
+      <div class="vtuber-data">
+        <el-statistic
+          title="舰长"
+          :value="cardData(item).guardCount[0]"
+        />
+        <div class="vtuber-data-footer">
+          对比昨日
+          <span
+            :class="
+              cardData(item).guardCount[0] <= cardData(item).guardCount[1]
+                ? 'red'
+                : 'green'
+            "
+          >
+            {{ cardData(item).guardCount[1] - cardData(item).guardCount[0] }}
+            <el-icon>
+              <CaretTop
+                v-if="
+                  cardData(item).guardCount[0] <= cardData(item).guardCount[1]
+                "
+              />
+              <CaretBottom v-else />
+            </el-icon>
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -101,7 +173,15 @@ export default defineComponent({
 <style scoped lang="scss">
 @import '@/styles/variables.module.scss';
 
-$minWidth: 200px;
+$minWidth: 140px;
+.green {
+  color: var(--el-color-success);
+}
+
+.red {
+  color: var(--el-color-error);
+}
+
 .vtuber-card-wrap {
   width: $wrapWidth;
   display: flex;
@@ -119,6 +199,12 @@ $minWidth: 200px;
     width: 100%;
     border-radius: 4px;
     background-color: $card-background-color;
+    cursor: pointer;
+    transition: box-shadow 0.15s cubic-bezier(0.33, 1, 0.68, 1);
+
+    //&:hover {
+    //  box-shadow: 1px 1px 4px 2px rgb(6, 218, 255);
+    //}
 
     .vtuber-card-divider {
       box-sizing: border-box;
@@ -132,7 +218,6 @@ $minWidth: 200px;
       padding-right: 8px;
       min-width: $minWidth;
       text-align: center;
-      cursor: pointer;
 
       .vtuber-avatar {
         position: relative;
@@ -162,17 +247,25 @@ $minWidth: 200px;
 
       .vtuber-info-text {
         color: $text-color;
-        font-size: 18px;
+        font-size: 16px;
       }
     }
 
     .vtuber-data {
+      height: 60%;
+      padding-left: 16px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      align-items: center;
+      //align-items: center;
       box-sizing: border-box;
       min-width: $minWidth;
+    }
+
+    .vtuber-data-footer {
+      margin-top: 4px;
+      font-size: 12px;
+      color: $text-color;
     }
   }
 }
