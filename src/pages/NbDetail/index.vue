@@ -4,7 +4,11 @@ import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import { Search } from '@element-plus/icons-vue'
 
-import { vtuberList, getVtuberDetailById } from '@/hooks/useVtuber'
+import {
+  allVtuberList,
+  vtuberList,
+  getVtuberDetailById
+} from '@/hooks/useVtuber'
 import VtuberDetailStatistic from '@/pages/NbDetail/components/VtuberDetailStatistic/index.vue'
 import NbSkeleton from '@/components/NbSkeleton/index.vue'
 
@@ -12,14 +16,17 @@ const router = useRouter()
 const { uId } = router.currentRoute.value.query
 
 onMounted(() => {
-  if (!vtuberList.find(item => item.uId === uId)) {
+  if (!vtuberList.value.find(item => item.uId === uId)) {
     getVtuberDetailById(uId)
   }
 })
 
 const currentVtuber = computed(() => {
-  return vtuberList.find(item => item.uId === uId)
+  return vtuberList.value.find(item => item.uId === +uId)
 })
+
+//选择的主播的uId
+const currentVtuberUId = ref(+uId || null)
 
 //时间选择器数据
 const selectedDate = ref([
@@ -74,6 +81,10 @@ const disabledData = date => {
   //禁用今天之后的日期
   return dayjs('2023-03-31').endOf('d').valueOf() < dayjs(date).valueOf()
 }
+
+const goHomePage = () => {
+  router.push('/')
+}
 </script>
 
 <script>
@@ -86,29 +97,62 @@ export default defineComponent({
 
 <template>
   <div class="detail-wrap">
-    <NbSkeleton :if-condition="!currentVtuber" />
-    <template v-if="currentVtuber">
-      <div class="detail-time-picker">
-        <el-date-picker
-          v-model="selectedDate"
-          :shortcuts="shortcuts"
-          type="daterange"
-          unlink-panels
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          value-format="x"
-          :disabled-date="disabledData"
-        />
-        <el-button
-          :style="{ 'vertical-align': 'baseline', 'margin-left': '8px' }"
-          :icon="Search"
-          @click="searchByDate"
-        >
-          按日期查询
-        </el-button>
-      </div>
-      <VtuberDetailStatistic />
+    <template v-if="uId">
+      <NbSkeleton :if-condition="!currentVtuber" />
+      <template v-if="currentVtuber">
+        <div class="detail-time-picker">
+          <el-select-v2
+            v-model="currentVtuberUId"
+            :options="allVtuberList"
+            filterable
+            placeholder="选择主播"
+            class="all-vtuber-select"
+            :height="400"
+            @change="() => router.push(`/detail?uId=${currentVtuberUId}`)"
+          />
+          <el-date-picker
+            v-model="selectedDate"
+            :shortcuts="shortcuts"
+            type="daterange"
+            unlink-panels
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="x"
+            :disabled-date="disabledData"
+          />
+          <el-button
+            :icon="Search"
+            @click="searchByDate"
+          >
+            按日期查询
+          </el-button>
+        </div>
+        <VtuberDetailStatistic :current-vtuber="currentVtuber" />
+      </template>
+    </template>
+    <template v-else>
+      <el-select-v2
+        v-model="currentVtuberUId"
+        :options="allVtuberList"
+        filterable
+        placeholder="选择主播"
+        class="all-vtuber-select"
+        :height="400"
+        @change="() => router.push(`/detail?uId=${currentVtuberUId}`)"
+      />
+      <el-result
+        icon="warning"
+        title="没有可用的uId"
+      >
+        <template #extra>
+          <el-button
+            type="primary"
+            @click="goHomePage"
+            >返回
+          </el-button>
+        </template>
+      </el-result>
     </template>
   </div>
 </template>
@@ -128,5 +172,9 @@ export default defineComponent({
     width: $wrapWidth;
     margin-bottom: 16px;
   }
+}
+
+.all-vtuber-select {
+  width: 220px;
 }
 </style>

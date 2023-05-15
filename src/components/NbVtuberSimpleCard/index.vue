@@ -1,46 +1,12 @@
 <script setup>
-import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { vtuberList } from '@/hooks/useVtuber'
 
 const router = useRouter()
 
-const sortMethod = ref('')
-
-const sortField = [
-  { label: '默认', value: '' },
-  { label: '总时长', value: 'totalLiveSecond' },
-  { label: '总场次', value: 'totalLiveCount' },
-  {
-    label: '总流水',
-    value: 'totalIncome'
-  },
-  { label: '平均流水', value: 'averageIncome' }
-]
-
-const sortedList = computed(() => {
-  switch (sortMethod.value) {
-    case 'totalLiveSecond':
-      return vtuberList.sort((a, b) => {
-        return b.channel.totalLiveSecond - a.channel.totalLiveSecond
-      })
-    case 'totalLiveCount':
-      return vtuberList.sort((a, b) => {
-        return b.channel.totalLiveCount - a.channel.totalLiveCount
-      })
-    case 'totalIncome':
-      return vtuberList.sort((a, b) => {
-        return b.channel.totalIncome - a.channel.totalIncome
-      })
-    case 'averageIncome':
-      return vtuberList.sort((a, b) => {
-        return (
-          b.channel.totalIncome / (b.channel.totalLiveSecond / (60 * 60)) -
-          a.channel.totalIncome / (a.channel.totalLiveSecond / (60 * 60))
-        )
-      })
-    default:
-      return vtuberList
+defineProps({
+  vtuberList: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -57,28 +23,14 @@ const jumpToChannel = () => {
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'VtuberCard',
-  props: {}
+  name: 'NbVtuberSimpleCard'
 })
 </script>
 
 <template>
-  <div class="vtuber-card-sort">
-    <div class="vtuber-card-sort-label">排序方式：</div>
-    <el-radio-group v-model="sortMethod">
-      <template
-        v-for="item in sortField"
-        :key="item.value"
-      >
-        <el-radio-button :label="item.value">
-          {{ item.label }}
-        </el-radio-button>
-      </template>
-    </el-radio-group>
-  </div>
   <div class="vtuber-card-wrap">
     <div
-      v-for="(item, index) in sortedList"
+      v-for="(item, index) in vtuberList"
       :key="index"
       class="vtuber-card"
     >
@@ -150,18 +102,6 @@ export default defineComponent({
 @import '@/styles/variables.module.scss';
 
 $minWidth: 200px;
-
-.vtuber-card-sort {
-  width: $wrapWidth;
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
-
-  .vtuber-card-sort-label {
-    font-size: 14px;
-  }
-}
-
 .vtuber-card-wrap {
   width: $wrapWidth;
   display: flex;
@@ -186,54 +126,54 @@ $minWidth: 200px;
       height: 70%;
       background-color: $divider-color;
     }
-  }
-}
 
-.vtuber-info {
-  box-sizing: border-box;
-  padding-right: 8px;
-  min-width: $minWidth;
-  text-align: center;
-  cursor: pointer;
+    .vtuber-info {
+      box-sizing: border-box;
+      padding-right: 8px;
+      min-width: $minWidth;
+      text-align: center;
+      cursor: pointer;
 
-  .vtuber-avatar {
-    position: relative;
-    margin-bottom: 8px;
-  }
+      .vtuber-avatar {
+        position: relative;
+        margin-bottom: 8px;
+      }
 
-  .vtuber-info-stream {
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translate(-50%, 0);
-    box-sizing: border-box;
-    display: inline-block;
-    font-size: 12px;
-    padding: 4px;
-    margin-bottom: 4px;
-    color: #fff;
-    //border: 1px solid rgba(255,255,255,0.7);
-    border-radius: 6px;
-    background-color: #f69;
-    box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.7);
+      .vtuber-info-stream {
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        box-sizing: border-box;
+        display: inline-block;
+        font-size: 12px;
+        padding: 4px;
+        margin-bottom: 4px;
+        color: #fff;
+        //border: 1px solid rgba(255,255,255,0.7);
+        border-radius: 6px;
+        background-color: #f69;
+        box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.7);
 
-    img {
-      width: 10px;
+        img {
+          width: 10px;
+        }
+      }
+
+      .vtuber-info-text {
+        color: $text-color;
+        font-size: 18px;
+      }
+    }
+
+    .vtuber-data {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      min-width: $minWidth;
     }
   }
-
-  .vtuber-info-text {
-    color: $text-color;
-    font-size: 18px;
-  }
-}
-
-.vtuber-data {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  min-width: $minWidth;
 }
 </style>

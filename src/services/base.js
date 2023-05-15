@@ -12,7 +12,7 @@ http.interceptors.response.use(
   response => {
     const { data } = response
     if (data.code === 200) {
-      return data.data
+      return data
     }
     return response
   },

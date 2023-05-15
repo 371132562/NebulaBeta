@@ -1,4 +1,13 @@
-<script setup></script>
+<script setup>
+import NbVtuberSimpleCard from '@/components/NbVtuberSimpleCard/index.vue'
+
+defineProps({
+  currentVtuber: {
+    type: Object,
+    default: () => ({})
+  }
+})
+</script>
 
 <script>
 import { defineComponent } from 'vue'
@@ -10,6 +19,7 @@ export default defineComponent({
 
 <template>
   <div class="statistic-wrap">
+    <NbVtuberSimpleCard :vtuber-list="[currentVtuber]" />
     <el-row :gutter="16">
       <el-col :span="8">
         <div class="statistic-card">
@@ -120,7 +130,11 @@ export default defineComponent({
 }
 
 .statistic-wrap {
-  width: $wrapWidth;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   .statistic-card {
     box-sizing: border-box;
