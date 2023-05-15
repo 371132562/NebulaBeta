@@ -103,6 +103,7 @@ export default defineComponent({
         <el-statistic
           :title="`${isDetail ? '' : '总'}流水（元）`"
           :value="cardData(item).totalIncome"
+          :precision="1"
         />
       </div>
       <div class="vtuber-card-divider" />
@@ -110,6 +111,7 @@ export default defineComponent({
         <el-statistic
           title="平均流水（元/时）"
           :value="cardData(item).averageIncome"
+          :precision="2"
         />
       </div>
       <div class="vtuber-card-divider" />
