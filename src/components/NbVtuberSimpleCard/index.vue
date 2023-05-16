@@ -177,7 +177,7 @@ export default defineComponent({
 <style scoped lang="scss">
 @import '@/styles/variables.module.scss';
 
-$minWidth: 140px;
+$minWidth: 124px;
 .green {
   color: var(--el-color-success);
 }

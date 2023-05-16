@@ -9,6 +9,7 @@ export default defineComponent({
   name: 'NbHeader'
 })
 </script>
+
 <template>
   <div class="nb-header">
     <router-link

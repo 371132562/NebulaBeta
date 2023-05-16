@@ -5,21 +5,21 @@ import NbContent from '@/components/NbLayout/components/NbContent/index.vue'
 
 <script>
 import { defineComponent } from 'vue'
+
 export default defineComponent({
   name: 'NbLayout'
 })
 </script>
 
 <template>
-  <div class="nb-layout" />
-  <NbHeader />
-  <NbContent />
+  <div class="nb-layout">
+    <NbHeader />
+    <NbContent />
+  </div>
 </template>
 
 <style scoped lang="scss">
 .nb-layout {
   position: relative;
-  width: 100vw;
-  height: 100vh;
 }
 </style>
