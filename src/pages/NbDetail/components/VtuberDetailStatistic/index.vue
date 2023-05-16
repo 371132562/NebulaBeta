@@ -81,14 +81,6 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
-.green {
-  color: var(--el-color-success);
-}
-
-.red {
-  color: var(--el-color-error);
-}
-
 .statistic-wrap {
   width: 100%;
   display: flex;
