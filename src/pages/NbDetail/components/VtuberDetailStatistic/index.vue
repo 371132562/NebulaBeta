@@ -1,11 +1,102 @@
 <script setup>
+import { computed, onMounted } from 'vue'
+import dayjs from 'dayjs'
+import * as echarts from 'echarts'
+
 import NbVtuberSimpleCard from '@/components/NbVtuberSimpleCard/index.vue'
 
-defineProps({
+const props = defineProps({
   currentVtuber: {
     type: Object,
     default: () => ({})
   }
+})
+
+const statisticData = computed(() => {
+  const { lives } = props.currentVtuber
+  const dailyLiveTime = dailyLiveTimeCalc(lives)
+  return {
+    dailyLiveTime
+  }
+})
+
+//根据lives数组中每项的startDate和stopDate计算每个自然日内的直播时间持续多少分钟
+const dailyLiveTimeCalc = lives => {
+  lives.reverse()
+  const dayLiveTime = {}
+  lives.forEach(item => {
+    const startDate = dayjs(item.startDate).format('YYYY-MM-DD')
+    const stopDate = dayjs(item.stopDate).format('YYYY-MM-DD')
+    if (startDate === stopDate) {
+      if (!dayLiveTime[startDate]) {
+        dayLiveTime[startDate] = 0
+      }
+      dayLiveTime[startDate] += (item.stopDate - item.startDate) / (1000 * 60)
+    } else {
+      const startDay = dayjs(item.startDate)
+      const stopDay = dayjs(item.stopDate)
+      let day = startDay
+      while (day <= stopDay) {
+        if (!dayLiveTime[day.format('YYYY-MM-DD')]) {
+          dayLiveTime[day.format('YYYY-MM-DD')] = 0
+        }
+        if (day.format('YYYY-MM-DD') === startDay.format('YYYY-MM-DD')) {
+          dayLiveTime[day.format('YYYY-MM-DD')] +=
+            (day.endOf('day') - item.startDate) / (1000 * 60)
+        } else if (day.format('YYYY-MM-DD') === stopDay.format('YYYY-MM-DD')) {
+          dayLiveTime[day.format('YYYY-MM-DD')] +=
+            (item.stopDate - day.startOf('day')) / (1000 * 60)
+        } else {
+          dayLiveTime[day.format('YYYY-MM-DD')] +=
+            (day.endOf('day') - day.startOf('day')) / (1000 * 60)
+        }
+        day = day.add(1, 'day')
+      }
+    }
+  })
+  let result = []
+  for (const dayLiveTimeKey in dayLiveTime) {
+    result.push([dayLiveTimeKey, +dayLiveTime[dayLiveTimeKey].toFixed(2)])
+  }
+  return result
+}
+
+onMounted(() => {
+  let chartDom = document.getElementById('daily-live-time-chart')
+  let myChart = echarts.init(chartDom, 'dark')
+  let option = {
+    title: {
+      top: 30,
+      left: 'center',
+      text: 'Daily Step Count'
+    },
+    tooltip: {},
+    visualMap: {
+      min: 0,
+      max: 300,
+      type: 'piecewise',
+      orient: 'horizontal',
+      left: 'center',
+      top: 65
+    },
+    calendar: {
+      top: 120,
+      left: 30,
+      right: 30,
+      cellSize: ['auto', 13],
+      range: '2023',
+      itemStyle: {
+        borderWidth: 0.5
+      },
+      yearLabel: { show: false }
+    },
+    series: {
+      type: 'heatmap',
+      coordinateSystem: 'calendar',
+      data: statisticData.value.dailyLiveTime
+    }
+  }
+  myChart.setOption(option)
 })
 </script>
 
@@ -20,104 +111,13 @@ export default defineComponent({
 <template>
   <div class="statistic-wrap">
     <NbVtuberSimpleCard
-      :vtuber-list="[currentVtuber]"
+      :vtuber-simple-data="currentVtuber"
       :is-detail="true"
     />
-    <!--    <el-row :gutter="16">-->
-    <!--      <el-col :span="8">-->
-    <!--        <div class="statistic-card">-->
-    <!--          <el-statistic :value="98500">-->
-    <!--            <template #title>-->
-    <!--              <div style="display: inline-flex; align-items: center">-->
-    <!--                Daily active users-->
-    <!--                <el-tooltip-->
-    <!--                  effect="dark"-->
-    <!--                  content="Number of users who logged into the product in one day"-->
-    <!--                  placement="top"-->
-    <!--                >-->
-    <!--                  <el-icon-->
-    <!--                    style="margin-left: 4px"-->
-    <!--                    :size="12"-->
-    <!--                  >-->
-    <!--                    <Warning />-->
-    <!--                  </el-icon>-->
-    <!--                </el-tooltip>-->
-    <!--              </div>-->
-    <!--            </template>-->
-    <!--          </el-statistic>-->
-    <!--          <div class="statistic-footer">-->
-    <!--            <div class="footer-item">-->
-    <!--              <span>than yesterday</span>-->
-    <!--              <span class="green">-->
-    <!--                24%-->
-    <!--                <el-icon>-->
-    <!--                  <CaretTop />-->
-    <!--                </el-icon>-->
-    <!--              </span>-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </el-col>-->
-    <!--      <el-col :span="8">-->
-    <!--        <div class="statistic-card">-->
-    <!--          <el-statistic :value="693700">-->
-    <!--            <template #title>-->
-    <!--              <div style="display: inline-flex; align-items: center">-->
-    <!--                Monthly Active Users-->
-    <!--                <el-tooltip-->
-    <!--                  effect="dark"-->
-    <!--                  content="Number of users who logged into the product in one month"-->
-    <!--                  placement="top"-->
-    <!--                >-->
-    <!--                  <el-icon-->
-    <!--                    style="margin-left: 4px"-->
-    <!--                    :size="12"-->
-    <!--                  >-->
-    <!--                    <Warning />-->
-    <!--                  </el-icon>-->
-    <!--                </el-tooltip>-->
-    <!--              </div>-->
-    <!--            </template>-->
-    <!--          </el-statistic>-->
-    <!--          <div class="statistic-footer">-->
-    <!--            <div class="footer-item">-->
-    <!--              <span>month on month</span>-->
-    <!--              <span class="red">-->
-    <!--                12%-->
-    <!--                <el-icon>-->
-    <!--                  <CaretBottom />-->
-    <!--                </el-icon>-->
-    <!--              </span>-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </el-col>-->
-    <!--      <el-col :span="8">-->
-    <!--        <div class="statistic-card">-->
-    <!--          <el-statistic-->
-    <!--            :value="72000"-->
-    <!--            title="New transactions today"-->
-    <!--          >-->
-    <!--            <template #title>-->
-    <!--              <div style="display: inline-flex; align-items: center">-->
-    <!--                New transactions today-->
-    <!--              </div>-->
-    <!--            </template>-->
-    <!--          </el-statistic>-->
-    <!--          <div class="statistic-footer">-->
-    <!--            <div class="footer-item">-->
-    <!--              <span>than yesterday</span>-->
-    <!--              <span class="green">-->
-    <!--                16%-->
-    <!--                <el-icon>-->
-    <!--                  <CaretTop />-->
-    <!--                </el-icon>-->
-    <!--              </span>-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </el-col>-->
-    <!--    </el-row>-->
+    <div
+      id="daily-live-time-chart"
+      class="statistic-chart"
+    ></div>
   </div>
 </template>
 
@@ -139,34 +139,9 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
 
-  .statistic-card {
-    box-sizing: border-box;
-    height: 100%;
-    padding: 24px;
-    border-radius: 4px;
-    background-color: var(--el-bg-color-overlay);
-  }
-
-  .statistic-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    font-size: 12px;
-    color: var(--el-text-color-regular);
-    margin-top: 16px;
-
-    .footer-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      span:last-child {
-        display: inline-flex;
-        align-items: center;
-        margin-left: 4px;
-      }
-    }
+  .statistic-chart {
+    width: $wrapWidth;
+    height: 400px;
   }
 }
 </style>

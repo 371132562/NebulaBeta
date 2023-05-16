@@ -72,7 +72,12 @@ export default defineComponent({
         </template>
       </el-radio-group>
     </div>
-    <NbVtuberSimpleCard :vtuber-list="sortedList" />
+    <template
+      v-for="(item, index) in vtuberList"
+      :key="index"
+    >
+      <NbVtuberSimpleCard :vtuber-simple-data="item" />
+    </template>
     <NbSkeleton :if-condition="vtuberList.length < uIdList.length" />
   </div>
 </template>

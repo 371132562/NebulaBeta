@@ -1,13 +1,15 @@
 <script setup>
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { CaretTop, CaretBottom } from '@element-plus/icons-vue'
+import dayjs from 'dayjs'
 
 const router = useRouter()
 
-defineProps({
-  vtuberList: {
-    type: Array,
-    default: () => []
+const props = defineProps({
+  vtuberSimpleData: {
+    type: Object,
+    default: () => {}
   },
   isDetail: {
     type: Boolean,
@@ -15,23 +17,29 @@ defineProps({
   }
 })
 
-const cardData = vtuber => {
-  const { lives } = vtuber
+const simpleData = computed(() => {
+  const { lives } = props.vtuberSimpleData
   const totalLiveCount = lives.length
   const totalLiveTime =
-    lives.reduce((total, item) => total + (item.stopDate - item.startDate), 0) /
+    lives.reduce(
+      (total, item) =>
+        total +
+        (item.isFinish ? item.stopDate : dayjs().valueOf()) -
+        item.startDate,
+      0
+    ) /
     (1000 * 60 * 60)
   const totalIncome = lives.reduce((total, item) => total + item.totalIncome, 0)
   //平均流水
   const averageIncome = totalIncome / totalLiveTime || 0
   return {
-    ...vtuber,
+    ...props.vtuberSimpleData,
     totalLiveCount,
     totalLiveTime,
     totalIncome,
     averageIncome
   }
-}
+})
 
 const jumpToDetail = uId => {
   router.push({ path: '/detail', query: { uId } })
@@ -53,10 +61,8 @@ export default defineComponent({
 <template>
   <div class="vtuber-card-wrap">
     <div
-      v-for="(item, index) in vtuberList"
-      :key="index"
       class="vtuber-card"
-      @click.prevent="jumpToDetail(cardData(item).uId)"
+      @click.prevent="jumpToDetail(simpleData.uId)"
     >
       <div class="vtuber-info">
         <div>
@@ -64,10 +70,10 @@ export default defineComponent({
             <el-avatar
               shape="circle"
               :size="60"
-              :src="cardData(item).faceUrl"
+              :src="simpleData.faceUrl"
             />
             <div
-              v-if="cardData(item).isLiving"
+              v-if="simpleData.isLiving"
               class="vtuber-info-stream"
               @click.stop="jumpToChannel"
             >
@@ -80,14 +86,14 @@ export default defineComponent({
           </div>
         </div>
         <div class="vtuber-info-text">
-          {{ cardData(item).uName }}
+          {{ simpleData.uName }}
         </div>
       </div>
       <div class="vtuber-card-divider" />
       <div class="vtuber-data">
         <el-statistic
           :title="`${isDetail ? '' : '总'}时长（时）`"
-          :value="cardData(item).totalLiveTime"
+          :value="simpleData.totalLiveTime"
           :precision="2"
         />
       </div>
@@ -95,14 +101,14 @@ export default defineComponent({
       <div class="vtuber-data">
         <el-statistic
           :title="`${isDetail ? '' : '总'}直播场次`"
-          :value="cardData(item).totalLiveCount"
+          :value="simpleData.totalLiveCount"
         />
       </div>
       <div class="vtuber-card-divider" />
       <div class="vtuber-data">
         <el-statistic
           :title="`${isDetail ? '' : '总'}流水（元）`"
-          :value="cardData(item).totalIncome"
+          :value="simpleData.totalIncome"
           :precision="1"
         />
       </div>
@@ -110,7 +116,7 @@ export default defineComponent({
       <div class="vtuber-data">
         <el-statistic
           title="平均流水（元/时）"
-          :value="cardData(item).averageIncome"
+          :value="simpleData.averageIncome"
           :precision="2"
         />
       </div>
@@ -118,23 +124,21 @@ export default defineComponent({
       <div class="vtuber-data">
         <el-statistic
           title="粉丝"
-          :value="cardData(item).fansCount[0]"
+          :value="simpleData.fansCount[0]"
         />
         <div class="vtuber-data-footer">
           对比昨日
           <span
             :class="
-              cardData(item).fansCount[0] <= cardData(item).fansCount[1]
+              simpleData.fansCount[0] <= simpleData.fansCount[1]
                 ? 'red'
                 : 'green'
             "
           >
-            {{ cardData(item).fansCount[1] - cardData(item).fansCount[0] }}
+            {{ simpleData.fansCount[1] - simpleData.fansCount[0] }}
             <el-icon>
               <CaretTop
-                v-if="
-                  cardData(item).fansCount[0] <= cardData(item).fansCount[1]
-                "
+                v-if="simpleData.fansCount[0] <= simpleData.fansCount[1]"
               />
               <CaretBottom v-else />
             </el-icon>
@@ -145,23 +149,21 @@ export default defineComponent({
       <div class="vtuber-data">
         <el-statistic
           title="舰长"
-          :value="cardData(item).guardCount[0]"
+          :value="simpleData.guardCount[0]"
         />
         <div class="vtuber-data-footer">
           对比昨日
           <span
             :class="
-              cardData(item).guardCount[0] <= cardData(item).guardCount[1]
+              simpleData.guardCount[0] <= simpleData.guardCount[1]
                 ? 'red'
                 : 'green'
             "
           >
-            {{ cardData(item).guardCount[1] - cardData(item).guardCount[0] }}
+            {{ simpleData.guardCount[1] - simpleData.guardCount[0] }}
             <el-icon>
               <CaretTop
-                v-if="
-                  cardData(item).guardCount[0] <= cardData(item).guardCount[1]
-                "
+                v-if="simpleData.guardCount[0] <= simpleData.guardCount[1]"
               />
               <CaretBottom v-else />
             </el-icon>
