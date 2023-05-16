@@ -1,9 +1,9 @@
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import dayjs from 'dayjs'
-import * as echarts from 'echarts'
 
 import NbVtuberSimpleCard from '@/components/NbVtuberSimpleCard/index.vue'
+import DailyLiveTime from '@/components/DailyLiveTime/index.vue'
 
 const props = defineProps({
   currentVtuber: {
@@ -60,44 +60,6 @@ const dailyLiveTimeCalc = lives => {
   }
   return result
 }
-
-onMounted(() => {
-  let chartDom = document.getElementById('daily-live-time-chart')
-  let myChart = echarts.init(chartDom, 'dark')
-  let option = {
-    title: {
-      top: 30,
-      left: 'center',
-      text: 'Daily Step Count'
-    },
-    tooltip: {},
-    visualMap: {
-      min: 0,
-      max: 300,
-      type: 'piecewise',
-      orient: 'horizontal',
-      left: 'center',
-      top: 65
-    },
-    calendar: {
-      top: 120,
-      left: 30,
-      right: 30,
-      cellSize: ['auto', 13],
-      range: '2023',
-      itemStyle: {
-        borderWidth: 0.5
-      },
-      yearLabel: { show: false }
-    },
-    series: {
-      type: 'heatmap',
-      coordinateSystem: 'calendar',
-      data: statisticData.value.dailyLiveTime
-    }
-  }
-  myChart.setOption(option)
-})
 </script>
 
 <script>
@@ -114,16 +76,11 @@ export default defineComponent({
       :vtuber-simple-data="currentVtuber"
       :is-detail="true"
     />
-    <div
-      id="daily-live-time-chart"
-      class="statistic-chart"
-    ></div>
+    <DailyLiveTime :daily-live-time-data="statisticData.dailyLiveTime" />
   </div>
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/variables.module.scss';
-
 .green {
   color: var(--el-color-success);
 }
@@ -138,10 +95,5 @@ export default defineComponent({
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  .statistic-chart {
-    width: $wrapWidth;
-    height: 400px;
-  }
 }
 </style>
